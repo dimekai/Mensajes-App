@@ -47,6 +47,40 @@ public class Inicio {
             }
 
         } while (opcion != 5);
+        
+        int optUser = 0;
+        do {
+            System.out.println("===========================");
+            System.out.println(" Aplicacion de usuarios ");
+            System.out.println("1. Crear usuario");
+            System.out.println("2. Listar usuarios");
+            System.out.println("3. Editar usuario");
+            System.out.println("4. Eliminar usuario");
+            System.out.println("5. Salir");
+            optUser = Integer.valueOf(sc.nextLine());
+
+            switch (optUser) {
+                case 1:
+                    UsuarioService.crearUsuario();
+                    break;
+
+                case 2:
+                    UsuarioService.listarUsuarios();
+                    break;
+
+                case 3:
+                    UsuarioService.actualizarUsuario();
+                    break;
+
+                case 4:
+                    UsuarioService.eliminarUsuario();
+                    break;
+
+                default:
+                    break;
+            }
+
+        } while (optUser != 5);
 
         try (Connection cnx = conexion.getConnection()) {
 

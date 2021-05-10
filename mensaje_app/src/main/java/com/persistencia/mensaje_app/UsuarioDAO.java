@@ -9,92 +9,98 @@ import java.sql.SQLException;
  *
  * @author kaimorts
  */
-public class MensajeDAO {
+public class UsuarioDAO {
 
-    public static void crearMensajeDB(Mensaje mensaje) {
+    public static void crearUsuarioDB(Usuario usuario) {
         Conexion dbConexion = new Conexion();
         try (Connection conexion = dbConexion.getConnection()) {
             PreparedStatement ps = null;
-
             try {
-                String query = "INSERT INTO Mensajes (mensaje, autor) VALUES (?,?);";
+                String query = "INSERT INTO Usuarios (nombre, correo, sexo, edad) VALUES (?,?,?,?);";
                 ps = conexion.prepareStatement(query);
-                ps.setString(1, mensaje.getMensaje());
-                ps.setString(2, mensaje.getAutor());
+                ps.setString(1, usuario.getNombre());
+                ps.setString(2, usuario.getCorreo());
+                ps.setString(3, usuario.getSexo());
+                ps.setInt(4, usuario.getEdad());
 
                 ps.executeUpdate();
-                System.out.println("\t== The new message was created ==");
+                System.out.println("\t== The new user was created ==");
             } catch (SQLException e) {
-                System.err.println("There was an exception when the message was updating");
+                System.err.println("There was an exception to create the new user");
                 System.err.println(e.getMessage());
             }
 
-        } catch (SQLException e) {
-            System.err.println("There was an exception in the connection.\n" + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("There was an exception to connect to database");
+            System.err.println(e.getMessage());
         }
     }
 
-    public static void leerMensajesDB() {
+    public static void leerUsuariosDB() {
         Conexion dbConexion = new Conexion();
         try (Connection conexion = dbConexion.getConnection()) {
             PreparedStatement ps = null;
             ResultSet rs = null;
             try {
-                String query = "SELECT id_mensaje, mensaje, autor, fecha FROM Mensajes;";
+                String query = "SELECT id_usuario, nombre, correo, sexo, edad FROM Usuarios;";
                 ps = conexion.prepareStatement(query);
                 rs = ps.executeQuery();
-
-                System.out.println("\t== The list of messages ==");
+                
+                System.out.println("\t== The list of Users ==");
                 while (rs.next()) {
-                    System.out.println("ID Mensaje:\t" + rs.getInt("id_mensaje"));
-                    System.out.println("Mensaje:\t" + rs.getString("mensaje"));
-                    System.out.println("Autor:\t\t" + rs.getString("autor"));
-                    System.out.println("Fecha:\t\t" + rs.getString("fecha"));
+                    System.out.println("ID Usuario:\t" + rs.getInt("id_usuario"));
+                    System.out.println("Nombre:\t\t" + rs.getString("nombre"));
+                    System.out.println("Correo:\t\t" + rs.getString("correo"));
+                    System.out.println("Sexo:\t\t" + rs.getString("sexo"));
+                    System.out.println("Edad:\t\t" + rs.getInt("edad"));
                     System.out.println("");
                 }
 
             } catch (SQLException e) {
-                System.err.println("There was an exception when retrieving messages");
+                System.err.println("There was an exception to list the users");
                 System.err.println(e.getMessage());
             }
-        } catch (SQLException e) {
-            System.err.println("There was an exception in the connection.\n" + e.getMessage());
+
+        } catch (Exception e) {
+            System.err.println("There was an exception to connect to database");
+            System.err.println(e.getMessage());
         }
     }
 
-    public static void borrarMensajeDB(int id_mensaje) {
+    public static void eliminarUsuario(int id_usuario) {
         Conexion dbConexion = new Conexion();
         try (Connection conexion = dbConexion.getConnection()) {
             PreparedStatement ps = null;
             try {
-                String query = "DELETE FROM Mensajes WHERE id_mensaje = ?";
+                String query = "DELETE FROM Usuarios WHERE id_usuario = ?;";
                 ps = conexion.prepareStatement(query);
-                ps.setInt(1, id_mensaje);
+                ps.setInt(1, id_usuario);
                 ps.executeUpdate();
-                System.out.println("\t== The message was deleted ==");
-
+                System.out.println("\t== The user was deleted ==");
             } catch (SQLException e) {
                 System.err.println("There was an exception when deleting the message");
                 System.err.println(e.getMessage());
-
             }
         } catch (SQLException e) {
             System.err.println("There was an exception in the connection.\n" + e.getMessage());
         }
     }
 
-    public static void actualizarMensajeDB(Mensaje mensaje) {
+    public static void actualizarUsuario(Usuario usuario) {
         Conexion dbConexion = new Conexion();
         try (Connection conexion = dbConexion.getConnection()) {
             PreparedStatement ps = null;
 
             try {
-                String query = "UPDATE Mensajes SET mensaje = ? WHERE id_mensaje = ?;";
+                String query = "UPDATE Usuarios SET nombre = ?, correo = ?, sexo = ?, edad = ? WHERE id_usuario = ?;";
                 ps = conexion.prepareStatement(query);
-                ps.setString(1, mensaje.getMensaje());
-                ps.setInt(2, mensaje.getId_mensaje());
-                
+                ps.setString(1, usuario.getNombre());
+                ps.setString(2, usuario.getCorreo());
+                ps.setString(3, usuario.getSexo());
+                ps.setInt(4, usuario.getEdad());
+                ps.setInt(5, usuario.getId_usuario());
                 ps.executeUpdate();
+                
                 System.out.println("\t== The message was successfully updated ==");
             } catch (SQLException e) {
                 System.err.println("There was an exception when updating the message");
